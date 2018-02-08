@@ -1,8 +1,8 @@
 package domain
 
 
-case class Transactions(id: Long, value: Double, decription: String)
+case class Transaction(id: Long, value: Double, description: String)
 
-case class Customer(id: Long, name: String, balance: List[Transactions])
+case class Customer(id: Long, name: String, balance: List[Transaction])
 
 case class Product(id: Long, name: String, price: Double)
