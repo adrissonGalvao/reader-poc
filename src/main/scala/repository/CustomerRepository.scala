@@ -1,18 +1,34 @@
 package repository
 
+import cats.data.Reader
 import domain.Customer
 
 import scala.collection.mutable.ListBuffer
 
-class CustomerRepository {
+trait CustomerRepository {
 
-  var rep: ListBuffer[Customer] = new ListBuffer()
+  def create(customer: Customer): Customer
 
-  def createCustomer(customer: Customer): Customer = {
-    rep += customer
+}
+
+class CustomerRepositoryImpl extends CustomerRepository {
+
+  def create(customer: Customer) = {
+    CustomerRepositoryImpl.rep += customer
     customer
   }
 
-  def findCustomer(id: Long): Option[Customer] = rep.find(_.id == id)
+}
+
+object CustomerRepositoryImpl {
+
+  var rep: ListBuffer[Customer] = new ListBuffer()
+
+}
+
+trait CustomerRepositoryWrapper {
+
+  def create(customer: Customer) =
+    Reader( (rep: CustomerRepository) => rep.create(customer) )
 
 }
