@@ -9,6 +9,8 @@ trait CustomerRepository {
 
   def findById(id: Long): Option[Customer]
 
+  def update(customer: Customer): Customer
+
 }
 
 class CustomerRepositoryInMemory extends CustomerRepository {
@@ -20,6 +22,12 @@ class CustomerRepositoryInMemory extends CustomerRepository {
 
   override def findById(id: Long): Option[Customer] = CustomerRepositoryInMemory.rep.find(_.id == id)
 
+  def update(customer: Customer): Customer = {
+    CustomerRepositoryInMemory.rep -= customer
+    CustomerRepositoryInMemory.rep += customer
+    customer
+  }
+  
 }
 
 object CustomerRepositoryInMemory {

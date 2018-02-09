@@ -1,7 +1,7 @@
 package service
 
 import cats.data.Reader
-import domain.Transaction
+import domain.{Customer, Transaction}
 import repository.{CustomerRepository, ProductRepository, TransactionRepository}
 
 case class TransactionRepositoryManager(customerService: CustomerRepository,
@@ -10,7 +10,7 @@ case class TransactionRepositoryManager(customerService: CustomerRepository,
 
 trait TransactionService {
 
-  def create(transaction: Transaction): Reader[TransactionRepositoryManager, Long]
+  def transact(customer: Customer, transaction: Transaction): Reader[TransactionRepositoryManager, Long]
 
   def findById(id: Long): Reader[TransactionRepositoryManager,Option[Transaction]]
 
@@ -18,10 +18,10 @@ trait TransactionService {
 
 class TransactionServerInterpreter extends TransactionService {
 
-
-  override def create(transaction: Transaction) = Reader((rep: TransactionRepositoryManager) => {
+  override def transact(customer: Customer, transaction: Transaction) = Reader((rep: TransactionRepositoryManager) => {
     rep.transactionRep.create(transaction)
-    // Should update Customer
+    // add transaction to user, calc
+
   })
 
   override def findById(id: Long) = Reader((rep: TransactionRepositoryManager) => rep.transactionRep.findById(id))
