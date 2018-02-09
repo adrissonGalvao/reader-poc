@@ -1,18 +1,32 @@
 package repository
 
-import domain.Product
+import domain.{Product}
 
 import scala.collection.mutable.ListBuffer
 
-class ProductRepository {
+trait ProductRepository  {
 
-  var rep: ListBuffer[Product] = new ListBuffer()
+  def create(product: Product): Long
 
-  def createProduct(product: Product): Product = {
-    rep += product
-    product
+  def findById(id: Long): Option[Product]
+
+}
+
+
+class ProductRepositoryInMemory extends ProductRepository {
+
+
+  def create(product: Product): Product = {
+    ProductRepositoryInMemory.rep += product
+    product.id
   }
 
-  def findProduct(id: Long): Option[Product] = rep.find(_.id == id)
+  def findById(id: Long): Option[Product] = ProductRepositoryInMemory.rep.find(_.id == id)
+
+}
+
+object  ProductRepositoryInMemory {
+
+  var rep: ListBuffer[Product] = new ListBuffer()
 
 }

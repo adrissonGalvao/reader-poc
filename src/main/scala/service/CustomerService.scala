@@ -6,7 +6,7 @@ import repository.{CustomerRepository, CustomerRepositoryInMemory}
 
 trait CustomerService {
 
-  def create(customer: Customer): Reader[CustomerRepository, Customer]
+  def create(customer: Customer): Reader[CustomerRepository, Long]
 
   def findById(id: Long): Reader[CustomerRepository,Option[Customer]]
 

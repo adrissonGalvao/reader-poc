@@ -1,13 +1,11 @@
 package repository
 
-import cats.data.Reader
 import domain.Customer
-
 import scala.collection.mutable.ListBuffer
 
 trait CustomerRepository {
 
-  def create(customer: Customer): Customer
+  def create(customer: Customer): Long
 
   def findById(id: Long): Option[Customer]
 
@@ -17,7 +15,7 @@ class CustomerRepositoryInMemory extends CustomerRepository {
 
   def create(customer: Customer) = {
     CustomerRepositoryInMemory.rep += customer
-    customer
+    customer.id
   }
 
   override def findById(id: Long): Option[Customer] = CustomerRepositoryInMemory.rep.find(_.id == id)
