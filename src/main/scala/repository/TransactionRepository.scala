@@ -4,15 +4,28 @@ import domain.Transaction
 
 import scala.collection.mutable.ListBuffer
 
-class TransactionRepository {
+trait TransactionRepository {
 
-  var rep: ListBuffer[Transaction] = new ListBuffer()
+  def create(transaction: Transaction): Long
 
-  def createTransaction(transaction: Transaction): Transaction = {
-    rep += transaction
-    transaction
+  def findById(id: Long): Option[Transaction]
+
+}
+
+
+class TransactionRepositoryInMemory extends TransactionRepository {
+
+  def create(transaction: Transaction) = {
+    TransactionRepositoryInMemory.rep += transaction
+    transaction.id
   }
 
-  def findTransaction(id: Long): Option[Transaction] = rep.find(_.id == id)
+  def findById(id: Long) = TransactionRepositoryInMemory.rep.find(_.id == id)
+
+}
+
+object TransactionRepositoryInMemory extends TransactionRepositoryInMemory {
+
+  var rep: ListBuffer[Transaction] = new ListBuffer()
 
 }

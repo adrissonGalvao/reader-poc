@@ -17,4 +17,5 @@ class CustomerServiceInterpreter extends CustomerService {
   override def create(customer: Customer) = Reader( (rep: CustomerRepository) => rep.create(customer))
 
   override def findById(id: Long) = Reader((rep: CustomerRepository) => rep.findById(id))
+
 }

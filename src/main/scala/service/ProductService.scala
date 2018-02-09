@@ -11,7 +11,7 @@ trait ProductService {
 
 }
 
-class ProductServiceInterpreter extends ProductService{
+class ProductServiceInterpreter extends ProductService {
 
   def create(product: Product) = Reader((rep: ProductRepository) => rep.create(product) )
 

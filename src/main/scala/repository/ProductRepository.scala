@@ -16,7 +16,7 @@ trait ProductRepository  {
 class ProductRepositoryInMemory extends ProductRepository {
 
 
-  def create(product: Product): Product = {
+  def create(product: Product): Long = {
     ProductRepositoryInMemory.rep += product
     product.id
   }
