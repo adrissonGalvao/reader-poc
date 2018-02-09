@@ -9,26 +9,23 @@ trait CustomerRepository {
 
   def create(customer: Customer): Customer
 
+  def findById(id: Long): Option[Customer]
+
 }
 
-class CustomerRepositoryImpl extends CustomerRepository {
+class CustomerRepositoryInMemory extends CustomerRepository {
 
   def create(customer: Customer) = {
-    CustomerRepositoryImpl.rep += customer
+    CustomerRepositoryInMemory.rep += customer
     customer
   }
 
+  override def findById(id: Long): Option[Customer] = CustomerRepositoryInMemory.rep.find(_.id == id)
+
 }
 
-object CustomerRepositoryImpl {
+object CustomerRepositoryInMemory {
 
   var rep: ListBuffer[Customer] = new ListBuffer()
-
-}
-
-trait CustomerRepositoryWrapper {
-
-  def create(customer: Customer) =
-    Reader( (rep: CustomerRepository) => rep.create(customer) )
 
 }

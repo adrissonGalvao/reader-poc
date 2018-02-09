@@ -1,31 +1,38 @@
 import cats.data.Reader
 import domain.Customer
-import repository.{CustomerRepository, CustomerRepositoryImpl}
-import service.CustomerService
+import repository.{CustomerRepository, CustomerRepositoryInMemory}
+import service.CustomerServiceInterpreter
 
 
-class Execution(customerRepository: CustomerRepository) extends CustomerService {
+class Execution(customerRepository: CustomerRepository){
 
-
-  def impl = {
-    val customer = Customer(1,"Cliente 1", Nil)
-
-    run(create(customer) andThen (x => println(x)) )
-  }
+  val service = new CustomerServiceInterpreter
 
   private def run[A](reader: Reader[CustomerRepository,A]) = {
     reader(customerRepository)
   }
 
+
+
+  def impl = {
+    val customer = Customer(1,"Cliente 1", Nil)
+
+    run(service.create(customer))
+
+
+  }
+
+
 }
 
-object Execution extends Execution(new CustomerRepositoryImpl)
+object Execution extends Execution(new CustomerRepositoryInMemory)
 
 object Main extends App {
 
-  val x = Execution
+  val ex = Execution
 
-  x.impl
+  val x = ex.impl
 
+  println(x)
 
 }
